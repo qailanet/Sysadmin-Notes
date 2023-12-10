@@ -1,0 +1,26 @@
+# list account from reseller owner
+# grep resellerUserName /etc/trueuserowners | cut -d : -f 1
+
+
+1) First you need to create one Migarting-Accounts.txt file and add the the user name , which you want to create packages.
+
+2) Create Migration directory for to move all the cPmove files from /home directory to Migration directory.
+
+then use following command to create cpmove packages and moved to “Migration” directory.
+for i in `cat /home/Migarting-Accounts.txt`;do /scripts/pkgacct $i; mv /home/cpmove-$i.tar.gz /home/Migration/;done
+
+or Use this script for migrating Reseller and/or Bulk accounts between cPanel hosting servers::
+
+For Reseller::
+cat /etc/trueuserowners | grep username | awk ‘{print “/scripts/pkgacct “$1}’
+
+OR
+
+1. cat /etc/trueuserowners | awk ‘{print $1}’ > 1.txt
+then remove the sign “:” from 1.txt
+
+for i in `cat 1.txt`;do /scripts/pkgacct $i; mv /home/cpmove-$i.tar.gz /home/Migration/;done
+
+Then move the “Migration” folder and 1.txt file to remote server and by using following command restore all the accounts.
+for i in `cat 1.txt`;do /scripts/restorepkg $i;done
+

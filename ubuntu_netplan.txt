@@ -1,0 +1,46 @@
+# This is the network config written by 'subiquity'
+network:
+  bonds:
+    bond0:
+      interfaces:
+      - ens5f1
+      - ens6f0
+      mtu: 9000
+      parameters:
+        lacp-rate: fast
+        mode: 802.3ad
+        transmit-hash-policy: layer3+4
+    bond1:
+      interfaces:
+      - ens5f0
+      - ens6f1
+      mtu: 9000
+      parameters:
+        lacp-rate: fast
+        mode: 802.3ad
+        transmit-hash-policy: layer3+4
+  ethernets:
+    ens5f0: {}
+    ens5f1: {}
+    ens6f0: {}
+    ens6f1: {}
+  vlans:
+      management:
+        id: 32
+        link: bond0
+        addresses: [10.22.32.151/20]
+        mtu: 9000
+      storage:
+        id: 64
+        link: bond0
+        addresses: [10.22.64.151/20]
+        mtu: 9000
+        gateway4: 10.22.64.1
+        nameservers:
+          addresses: [9.9.9.9, 8.8.8.8]
+      backend:
+        id: 80
+        link: bond1
+        addresses: [10.22.80.151/24]
+        mtu: 9000
+  version: 2
